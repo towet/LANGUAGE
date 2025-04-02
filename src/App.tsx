@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Languages, Send, Menu, X, ArrowRight, Eye, EyeOff, Globe, Laptop, Settings, Zap, Smartphone, ShoppingCart, Clock } from 'lucide-react';
+import { Languages, Send, Menu, X, ArrowRight, Eye, EyeOff, Globe, Settings, Zap, Clock } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import { getGeminiResponse } from './lib/gemini';
 import { addKnowledgeEntry } from './lib/knowledgeBase';
 import { KnowledgeEntry } from './data/knowledgeBase';
-import heroImage from './assets/hero.jpg';
-import heroTwo from './assets/hero2.jpg';
+import heroImage from './assets/hero.jpeg';
 
 interface Message {
   id: number;
@@ -1124,9 +1123,9 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Smartphone className="h-8 w-8 text-emerald-600" />
+              <Globe className="h-8 w-8 text-emerald-600" />
               <span className="ml-2 text-xl font-bold bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 text-transparent bg-clip-text">
-                Smart Gadgets
+                LangLearn AI
               </span>
             </div>
             
@@ -1265,15 +1264,16 @@ const App = () => {
           <div className="flex-1 space-y-6 text-center md:text-left w-full">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
               <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 text-transparent bg-clip-text">
-                Welcome to
+                Learn Languages
               </span>
               <br />
-              Smart Gadgets
+              With AI Assistance
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Your one-stop destination for the latest electronics and expert tech support.
+              Master English, French, and Swahili through interactive lessons and personalized AI tutoring. 
+              Start your language learning journey today!
             </p>
-            <div className="flex justify-center md:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <button
                 onClick={() => {
                   if (isAuthenticated) {
@@ -1282,93 +1282,132 @@ const App = () => {
                     setAuthMode('signup');
                   }
                 }}
-                className="bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 text-white px-8 py-3 rounded-xl hover:opacity-90 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full md:w-auto"
+                className="px-8 py-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors font-medium text-lg"
               >
-                Start Chat
-                <ArrowRight className="inline-block ml-2 h-5 w-5" />
+                Start Learning
+              </button>
+              <button
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setShowLanguageSelector(true);
+                  } else {
+                    setAuthMode('login');
+                  }
+                }}
+                className="px-8 py-3 border-2 border-emerald-500 text-emerald-600 rounded-xl hover:bg-emerald-50 transition-colors font-medium text-lg"
+              >
+                Continue Learning
               </button>
             </div>
-          </div>
-          
-          {/* Image Container */}
-          <div className="flex-1 relative w-full">
-            <div className="relative w-full h-[450px] md:h-[500px] lg:h-[600px]">
-              <img
-                src={heroImage}
-                alt="Electronics store"
-                className="w-full h-full object-cover rounded-2xl shadow-2xl transform hover:scale-[1.02] transition duration-500"
-              />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-emerald-600/20 via-transparent to-transparent"></div>
-            </div>
-            {/* Floating Stats */}
-            <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition duration-300">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-100 rounded-lg">
-                  <Laptop className="h-6 w-6 text-emerald-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Success Rate</p>
-                  <p className="font-bold text-emerald-600">98%</p>
-                </div>
+            <div className="flex items-center justify-center md:justify-start gap-8 pt-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-600">3</div>
+                <div className="text-sm text-gray-600">Languages</div>
               </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-600">100+</div>
+                <div className="text-sm text-gray-600">Lessons</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-600">24/7</div>
+                <div className="text-sm text-gray-600">AI Support</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="flex-1">
+            <img
+              src={heroImage}
+              alt="Language Learning"
+              className="w-full h-auto rounded-2xl shadow-2xl"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Our Language Learning Platform?
+            </h2>
+            <p className="text-xl text-gray-600">
+              Experience a new way of learning languages with AI-powered tutoring
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Interactive Learning */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                <Languages className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Interactive Learning
+              </h3>
+              <p className="text-gray-600">
+                Engage in dynamic lessons with real-time feedback and practice exercises tailored to your level.
+              </p>
+            </div>
+
+            {/* AI Tutoring */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                <Globe className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Personal AI Tutor
+              </h3>
+              <p className="text-gray-600">
+                Get instant help, practice conversations, and receive personalized corrections from your AI language tutor.
+              </p>
+            </div>
+
+            {/* Progress Tracking */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                <Settings className="h-6 w-6 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Track Your Progress
+              </h3>
+              <p className="text-gray-600">
+                Monitor your learning journey with detailed progress tracking, achievements, and skill assessments.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <div id="features" className="py-20">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 text-transparent bg-clip-text">
-            Why Choose Smart Gadgets?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
-            <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-br from-teal-500 to-green-500 bg-clip-text text-transparent mb-6">
-                Get Expert Advice Today
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Get personalized guidance for your electronics needs with our advanced AI chatbot.
-              </p>
-              <a
-                href="#chat"
-                className="inline-flex items-center px-6 py-3 text-lg font-medium text-white bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 rounded-xl hover:from-emerald-700 hover:to-green-700 transition-all duration-200"
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-500 rounded-3xl overflow-hidden">
+            <div className="px-8 py-16 md:p-16 text-center md:text-left md:flex items-center justify-between gap-8">
+              <div className="mb-8 md:mb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Start Your Language Journey Today
+                </h2>
+                <p className="text-emerald-50 text-lg">
+                  Join thousands of learners mastering new languages with AI assistance
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setShowLanguageSelector(true);
+                  } else {
+                    setAuthMode('signup');
+                  }
+                }}
+                className="px-8 py-4 bg-white text-emerald-600 rounded-xl hover:bg-emerald-50 transition-colors font-semibold text-lg shadow-lg"
               >
-                Start Chatting
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-            </div>
-            <div className="relative">
-              <img
-                src={heroTwo}
-                alt="Electronics store advisor"
-                className="w-full h-auto rounded-3xl shadow-2xl"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent rounded-3xl"></div>
-            </div>
-          </div>
-
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-600 via-teal-500 to-green-500 text-transparent bg-clip-text">
-            Why Choose Smart Gadgets?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 bg-white/50 backdrop-blur-lg rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 border border-white/20">
-              <ShoppingCart className="h-12 w-12 text-emerald-600 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Product Guidance</h3>
-              <p className="text-gray-600">Get personalized product recommendations based on your needs and preferences.</p>
-            </div>
-            <div className="p-8 bg-white/50 backdrop-blur-lg rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 border border-white/20">
-              <Settings className="h-12 w-12 text-emerald-600 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Technical Support</h3>
-              <p className="text-gray-600">Get expert technical support for your electronics products.</p>
-            </div>
-            <div className="p-8 bg-white/50 backdrop-blur-lg rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 border border-white/20">
-              <Zap className="h-12 w-12 text-emerald-600 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Warranty and Installation</h3>
-              <p className="text-gray-600">Get information on warranty and installation services for your electronics products.</p>
+                Begin Learning Now
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
