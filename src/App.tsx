@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Languages, Send, Menu, X, ArrowRight, Eye, EyeOff, Globe, Laptop, Settings, Zap, Smartphone, ShoppingCart } from 'lucide-react';
+import { Languages, Send, Menu, X, ArrowRight, Eye, EyeOff, Globe, Laptop, Settings, Zap, Smartphone, ShoppingCart, Clock } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import { getGeminiResponse } from './lib/gemini';
 import { addKnowledgeEntry } from './lib/knowledgeBase';
@@ -60,26 +60,7 @@ interface LanguageLearningPageProps {
   onClose: () => void;
 }
 
-const learningModules: {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  progress: number;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  duration: string;
-  xpReward: number;
-  content: {
-    theory: string;
-    video?: string;
-    quiz: Array<{
-      question: string;
-      options: string[];
-      correctAnswer: number;
-    }>;
-    practice: string;
-  };
-}[] = [
+const learningModules = [
   {
     id: 'english-basics',
     title: 'English Essentials',
@@ -89,43 +70,63 @@ const learningModules: {
     difficulty: 'Beginner',
     duration: '4 weeks',
     xpReward: 100,
-    content: {
-      theory: `# English Language Fundamentals
-      
-      ## Basic Grammar Rules
-      - Subject + Verb + Object structure
-      - Present, Past, and Future tenses
-      - Articles (a, an, the)
-      
-      ## Common Phrases
-      - Greetings and introductions
-      - Everyday conversations
-      - Asking for directions
-      
-      ## Pronunciation Guide
-      - Vowel sounds
-      - Consonant clusters
-      - Word stress patterns`,
-      video: 'https://example.com/english-basics',
-      quiz: [
-        {
-          question: 'Which sentence is grammatically correct?',
-          options: [
-            'I am going to the store',
-            'I going to the store',
-            'I to going the store',
-            'Me go store'
-          ],
-          correctAnswer: 0
-        },
-        {
-          question: 'What is the past tense of "eat"?',
-          options: ['eat', 'ate', 'eaten', 'eated'],
-          correctAnswer: 1
+    lessons: [
+      {
+        id: 'eng-lesson-1',
+        title: 'Greetings & Introductions',
+        duration: '20 min',
+        xp: 25,
+        content: {
+          theory: `# Greetings in English
+          - Hello / Hi
+          - Good morning/afternoon/evening
+          - How are you?
+          - Nice to meet you`,
+          practice: [
+            'Introduce yourself',
+            'Greet someone formally',
+            'Ask how someone is doing'
+          ]
         }
-      ],
-      practice: 'Practice basic conversations with our AI tutor!'
-    }
+      },
+      {
+        id: 'eng-lesson-2',
+        title: 'Basic Conversations',
+        duration: '25 min',
+        xp: 30,
+        content: {
+          theory: `# Common Phrases
+          - What is your name?
+          - Where are you from?
+          - How is the weather?
+          - Have a nice day!`,
+          practice: [
+            "Ask someone's name and origin",
+            "Talk about the weather",
+            "End conversations politely"
+          ]
+        }
+      },
+      {
+        id: 'eng-lesson-3',
+        title: 'Numbers & Counting',
+        duration: '15 min',
+        xp: 20,
+        content: {
+          theory: `# Numbers 1-100
+          - Cardinal numbers
+          - Ordinal numbers
+          - Phone numbers
+          - Prices`,
+          practice: [
+            'Count from 1 to 100',
+            'Tell time in English',
+            'Talk about prices'
+          ]
+        }
+      }
+    ],
+    language: 'English'
   },
   {
     id: 'french-starter',
@@ -136,38 +137,63 @@ const learningModules: {
     difficulty: 'Beginner',
     duration: '4 weeks',
     xpReward: 100,
-    content: {
-      theory: `# French Language Basics
-      
-      ## Essential Grammar
-      - Le, la, les (articles)
-      - Regular -er, -ir, -re verbs
-      - Basic conjugations
-      
-      ## Key Phrases
-      - Bonjour, Au revoir
-      - S'il vous plaît, Merci
-      - Comment allez-vous?
-      
-      ## Pronunciation
-      - Nasal sounds
-      - Silent letters
-      - Liaisons`,
-      video: 'https://example.com/french-basics',
-      quiz: [
-        {
-          question: 'What is the correct article for "table" in French?',
-          options: ['le', 'la', 'les', 'l\''],
-          correctAnswer: 1
-        },
-        {
-          question: 'How do you say "Hello" in French?',
-          options: ['Au revoir', 'Bonjour', 'Merci', 'S\'il vous plaît'],
-          correctAnswer: 1
+    lessons: [
+      {
+        id: 'fr-lesson-1',
+        title: 'Salutations & Politesse',
+        duration: '20 min',
+        xp: 25,
+        content: {
+          theory: `# French Greetings
+          - Bonjour / Salut
+          - Au revoir
+          - S'il vous plaît
+          - Merci beaucoup`,
+          practice: [
+            'Greet formally and informally',
+            'Use basic courtesies',
+            'Say goodbye properly'
+          ]
         }
-      ],
-      practice: 'Practice French pronunciation and basic conversations!'
-    }
+      },
+      {
+        id: 'fr-lesson-2',
+        title: 'Les Articles',
+        duration: '25 min',
+        xp: 30,
+        content: {
+          theory: `# French Articles
+          - Le (masculine)
+          - La (feminine)
+          - Les (plural)
+          - L' (before vowels)`,
+          practice: [
+            'Identify noun genders',
+            'Use correct articles',
+            'Practice with common nouns'
+          ]
+        }
+      },
+      {
+        id: 'fr-lesson-3',
+        title: 'Les Nombres',
+        duration: '15 min',
+        xp: 20,
+        content: {
+          theory: `# Numbers in French
+          - Un à vingt
+          - Les dizaines
+          - Cent et mille
+          - L'argent`,
+          practice: [
+            'Count in French',
+            'Tell time in French',
+            'Discuss prices'
+          ]
+        }
+      }
+    ],
+    language: 'French'
   },
   {
     id: 'swahili-intro',
@@ -178,38 +204,63 @@ const learningModules: {
     difficulty: 'Beginner',
     duration: '4 weeks',
     xpReward: 100,
-    content: {
-      theory: `# Swahili Language Fundamentals
-      
-      ## Basic Grammar
-      - Noun classes
-      - Present tense
-      - Subject prefixes
-      
-      ## Essential Phrases
-      - Jambo (Hello)
-      - Habari (How are you?)
-      - Asante (Thank you)
-      
-      ## Pronunciation Guide
-      - Vowel sounds
-      - Consonant combinations
-      - Stress patterns`,
-      video: 'https://example.com/swahili-basics',
-      quiz: [
-        {
-          question: 'What does "Jambo" mean?',
-          options: ['Goodbye', 'Hello', 'Thank you', 'Please'],
-          correctAnswer: 1
-        },
-        {
-          question: 'How do you say "Thank you" in Swahili?',
-          options: ['Jambo', 'Habari', 'Asante', 'Karibu'],
-          correctAnswer: 2
+    lessons: [
+      {
+        id: 'sw-lesson-1',
+        title: 'Salamu na Utambulisho',
+        duration: '20 min',
+        xp: 25,
+        content: {
+          theory: `# Swahili Greetings
+          - Jambo / Hujambo
+          - Habari yako?
+          - Jina lako nani?
+          - Asante / Karibu`,
+          practice: [
+            'Greet people throughout the day',
+            'Introduce yourself',
+            'Ask and respond to basic questions'
+          ]
         }
-      ],
-      practice: 'Practice Swahili greetings and basic conversations!'
-    }
+      },
+      {
+        id: 'sw-lesson-2',
+        title: 'Maneno ya Msingi',
+        duration: '25 min',
+        xp: 30,
+        content: {
+          theory: `# Basic Words
+          - Ndiyo / Hapana
+          - Tafadhali
+          - Pole / Samahani
+          - Kwaheri`,
+          practice: [
+            'Use basic vocabulary',
+            'Form simple sentences',
+            'Practice daily expressions'
+          ]
+        }
+      },
+      {
+        id: 'sw-lesson-3',
+        title: 'Nambari na Hesabu',
+        duration: '15 min',
+        xp: 20,
+        content: {
+          theory: `# Numbers & Counting
+          - Moja hadi kumi
+          - Hesabu za msingi
+          - Pesa na bei
+          - Saa na muda`,
+          practice: [
+            'Count in Swahili',
+            'Tell time',
+            'Discuss money and prices'
+          ]
+        }
+      }
+    ],
+    language: 'Kiswahili'
   }
 ];
 
@@ -724,6 +775,7 @@ const LanguageLearningPage: React.FC<LanguageLearningPageProps> = ({
   onClose
 }) => {
   const [activeModule, setActiveModule] = useState<string>('chat');
+  const [activeLesson, setActiveLesson] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -734,35 +786,30 @@ const LanguageLearningPage: React.FC<LanguageLearningPageProps> = ({
 
     const newMessage: Message = {
       id: messages.length + 1,
-      content: inputMessage.trim(),
-      sender: 'user',
-      timestamp: new Date(),
+      content: inputMessage,
+      sender: 'user' as const,
+      timestamp: new Date()
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      const context = `You are an AI language tutor helping someone learn ${selectedLanguage}. 
-        Current level: ${learningProgress.level}. 
-        Focus on making responses educational and include examples when possible.
-        If the user asks for translations, provide them along with pronunciation guides.
-        Occasionally quiz the user to reinforce learning.`;
-
-      const response = await getGeminiResponse(inputMessage + '\n\nContext: ' + context);
-
-      const aiMessage: Message = {
-        id: messages.length + 2,
-        content: response,
-        sender: 'ai',
-        timestamp: new Date(),
-      };
-
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (error: any) {
+      const response = await getGeminiResponse(inputMessage, selectedLanguage || 'English');
+      
+      setMessages(prev => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          content: response,
+          sender: 'ai' as const,
+          timestamp: new Date()
+        }
+      ]);
+    } catch (error) {
       console.error('Error getting AI response:', error);
-      toast.error('Failed to get response. Please try again.');
+      toast.error('Failed to get response from AI tutor');
     } finally {
       setIsLoading(false);
     }
@@ -804,7 +851,7 @@ const LanguageLearningPage: React.FC<LanguageLearningPageProps> = ({
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-20">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
@@ -820,36 +867,76 @@ const LanguageLearningPage: React.FC<LanguageLearningPageProps> = ({
                 </div>
                 <div className="border-t border-gray-100">
                   <div className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-400 mb-4">LEARNING MODULES</h4>
+                    <h4 className="text-sm font-semibold text-gray-400 mb-4">
+                      {selectedLanguage?.toUpperCase()} LEARNING MODULES
+                    </h4>
                     <div className="space-y-2">
-                      {learningModules.map(module => (
-                        <button
-                          key={module.id}
-                          onClick={() => setActiveModule(module.id)}
-                          className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
-                            activeModule === module.id
-                              ? 'bg-emerald-50 text-emerald-600'
-                              : 'hover:bg-gray-50 text-gray-600'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            activeModule === module.id
-                              ? 'bg-emerald-100'
-                              : 'bg-gray-100'
-                          }`}>
-                            {module.icon}
+                      {learningModules
+                        .filter(module => module.language === selectedLanguage)
+                        .map(module => (
+                          <div key={module.id} className="mb-6">
+                            <button
+                              onClick={() => setActiveModule(module.id)}
+                              className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
+                                activeModule === module.id
+                                  ? 'bg-emerald-50 text-emerald-600'
+                                  : 'hover:bg-gray-50 text-gray-600'
+                              }`}
+                            >
+                              <div className={`p-2 rounded-lg ${
+                                activeModule === module.id
+                                  ? 'bg-emerald-100'
+                                  : 'bg-gray-100'
+                              }`}>
+                                {module.icon}
+                              </div>
+                              <div className="flex-1 text-left">
+                                <h3 className="font-medium text-sm">{module.title}</h3>
+                                <p className="text-xs text-gray-500">{module.description}</p>
+                                <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                                  <div
+                                    className="h-full bg-emerald-500 transition-all duration-500"
+                                    style={{ width: `${module.progress}%` }}
+                                  />
+                                </div>
+                              </div>
+                            </button>
+                            
+                            {/* Lessons List */}
+                            {activeModule === module.id && (
+                              <div className="mt-3 ml-12 space-y-2">
+                                {module.lessons.map((lesson) => (
+                                  <button
+                                    key={lesson.id}
+                                    onClick={() => {
+                                      // Handle lesson selection
+                                      setActiveModule(lesson.id);
+                                      setActiveLesson(lesson.id);
+                                    }}
+                                    className="w-full p-3 rounded-lg bg-white border border-gray-100 hover:border-emerald-200 transition-all"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex-1">
+                                        <h4 className="text-sm font-medium text-gray-900">{lesson.title}</h4>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs text-gray-500">
+                                            <Clock className="inline-block w-3 h-3 mr-1" />
+                                            {lesson.duration}
+                                          </span>
+                                          <span className="text-xs text-gray-500">
+                                            <Zap className="inline-block w-3 h-3 mr-1" />
+                                            {lesson.xp} XP
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <ArrowRight className="w-4 h-4 text-gray-400" />
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                          <div className="flex-1 text-left">
-                            <h3 className="font-medium text-sm">{module.title}</h3>
-                            <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                              <div
-                                className="h-full bg-emerald-500 transition-all duration-500"
-                                style={{ width: `${module.progress}%` }}
-                              />
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -863,44 +950,110 @@ const LanguageLearningPage: React.FC<LanguageLearningPageProps> = ({
               {/* Chat Header */}
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {activeModule === 'chat' ? 'Chat with AI Tutor' : learningModules.find(m => m.id === activeModule)?.title}
+                  {activeLesson ? (
+                    learningModules
+                      .flatMap(m => m.lessons)
+                      .find(l => l.id === activeLesson)?.title
+                  ) : (
+                    activeModule === 'chat' ? 'Chat with AI Tutor' : 
+                    learningModules.find(m => m.id === activeModule)?.title
+                  )}
                 </h3>
               </div>
 
-              {/* Chat Messages */}
+              {/* Content Area */}
               <div className="flex-1 overflow-y-auto p-6">
-                <div className="space-y-6">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${
-                        message.sender === 'user' ? 'justify-end' : 'justify-start'
-                      }`}
-                    >
+                {activeLesson ? (
+                  // Lesson Content
+                  <div className="space-y-6">
+                    {(() => {
+                      const lesson = learningModules
+                        .flatMap(m => m.lessons)
+                        .find(l => l.id === activeLesson);
+                      
+                      if (!lesson) return null;
+
+                      return (
+                        <>
+                          <div className="bg-white rounded-xl border border-gray-100 p-6">
+                            <div className="prose max-w-none">
+                              <div className="mb-6">
+                                {lesson.content.theory.split('\n').map((line, i) => (
+                                  <p key={i} className="mb-2">{line.trim()}</p>
+                                ))}
+                              </div>
+                              <div className="mt-8">
+                                <h4 className="text-lg font-semibold mb-4">Practice Activities</h4>
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {lesson.content.practice.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <button
+                              onClick={() => setActiveLesson(null)}
+                              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setActiveModule('chat');
+                                setActiveLesson(null);
+                                setMessages([{
+                                  id: messages.length + 1,
+                                  content: `Let's practice what we learned in "${lesson.title}"!`,
+                                  sender: 'user' as const,
+                                  timestamp: new Date()
+                                }]);
+                              }}
+                              className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                            >
+                              Practice with AI Tutor
+                            </button>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                ) : (
+                  // Chat Messages
+                  <div className="space-y-6">
+                    {messages.map((message) => (
                       <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                          message.sender === 'user'
-                            ? 'bg-emerald-500 text-white'
-                            : 'bg-gray-100 text-gray-800'
+                        key={message.id}
+                        className={`flex ${
+                          message.sender === 'user' ? 'justify-end' : 'justify-start'
                         }`}
                       >
-                        <p className="whitespace-pre-wrap">{message.content}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="bg-gray-100 rounded-2xl px-4 py-3">
-                        <div className="flex space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce" />
-                          <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce delay-100" />
-                          <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce delay-200" />
+                        <div
+                          className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                            message.sender === 'user'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap">{message.content}</p>
                         </div>
                       </div>
-                    </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
+                    ))}
+                    {isLoading && (
+                      <div className="flex justify-start">
+                        <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                          <div className="flex space-x-2">
+                            <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce" />
+                            <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce delay-100" />
+                            <div className="w-2 h-2 rounded-full bg-gray-300 animate-bounce delay-200" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
               </div>
 
               {/* Input Area */}
